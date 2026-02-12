@@ -39,6 +39,7 @@ func loadConfig() ClockConfig {
 			Clocks: []ClockEntry{
 				{Label: "Local", Location: "Local"},
 				{Label: "UTC", Location: "UTC"},
+				{Label: "Istanbul", Location: "Europe/Istanbul"},
 			},
 		}
 	}
@@ -54,21 +55,22 @@ func saveConfig(config ClockConfig) {
 	os.WriteFile(path, data, 0644)
 }
 
-// --- Big Font Renderer ---
+// --- Boxy Big Font Renderer ---
 
 var bigDigits = map[rune][]string{
-	'0': {"  ███  ", " █   █ ", " █   █ ", " █   █ ", "  ███  "},
-	'1': {"   █   ", "  ██   ", "   █   ", "   █   ", "  ███  "},
-	'2': {"  ███  ", "     █ ", "  ███  ", " █     ", "  ███  "},
-	'3': {"  ███  ", "     █ ", "  ███  ", "     █ ", "  ███  "},
-	'4': {" █   █ ", " █   █ ", "  ███  ", "     █ ", "     █ "},
-	'5': {"  ███  ", " █     ", "  ███  ", "     █ ", "  ███  "},
-	'6': {"  ███  ", " █     ", "  ███  ", " █   █ ", "  ███  "},
-	'7': {"  ███  ", "     █ ", "    █  ", "   █   ", "   █   "},
-	'8': {"  ███  ", " █   █ ", "  ███  ", " █   █ ", "  ███  "},
-	'9': {"  ███  ", " █   █ ", "  ███  ", "     █ ", "  ███  "},
-	':': {"       ", "   ░   ", "       ", "   ░   ", "       "},
-	'.': {"       ", "       ", "       ", "       ", "   ░   "},
+	'0': {" █████ ", " █   █ ", " █   █ ", " █   █ ", " █████ "},
+	'1': {"   ██  ", "    █  ", "    █  ", "    █  ", "  █████"},
+	'2': {" █████ ", "     █ ", " █████ ", " █     ", " █████ "},
+	'3': {" █████ ", "     █ ", "  ████ ", "     █ ", " █████ "},
+	'4': {" █   █ ", " █   █ ", " █████ ", "     █ ", "     █ "},
+	'5': {" █████ ", " █     ", " █████ ", "     █ ", " █████ "},
+	'6': {" █████ ", " █     ", " █████ ", " █   █ ", " █████ "},
+	'7': {" █████ ", "     █ ", "    █  ", "   █   ", "   █   "},
+	'8': {" █████ ", " █   █ ", " █████ ", " █   █ ", " █████ "},
+	'9': {" █████ ", " █   █ ", " █████ ", "     █ ", " █████ "},
+	':': {"       ", "   █   ", "       ", "   █   ", "       "},
+	'.': {"       ", "       ", "       ", "       ", "   █   "},
+	' ': {"       ", "       ", "       ", "       ", "       "},
 }
 
 func renderBigText(input string) string {
@@ -76,7 +78,7 @@ func renderBigText(input string) string {
 	for _, r := range input {
 		digit, ok := bigDigits[r]
 		if !ok {
-			digit = []string{"     ", "     ", "     ", "     ", "     "}
+			digit = []string{"       ", "       ", "       ", "       ", "       "}
 		}
 		for i := 0; i < 5; i++ {
 			lines[i] += digit[i]
@@ -121,6 +123,8 @@ type model struct {
 type keyMap struct {
 	Up     key.Binding
 	Down   key.Binding
+	Left   key.Binding
+	Right  key.Binding
 	Enter  key.Binding
 	Add    key.Binding
 	Delete key.Binding
@@ -129,12 +133,12 @@ type keyMap struct {
 }
 
 func (k keyMap) ShortHelp() []key.Binding {
-	return []key.Binding{k.Up, k.Down, k.Enter, k.Add, k.Delete, k.Back, k.Quit}
+	return []key.Binding{k.Up, k.Down, k.Left, k.Right, k.Enter, k.Add, k.Delete, k.Back, k.Quit}
 }
 
 func (k keyMap) FullHelp() [][]key.Binding {
 	return [][]key.Binding{
-		{k.Up, k.Down, k.Enter},
+		{k.Up, k.Down, k.Left, k.Right, k.Enter},
 		{k.Add, k.Delete, k.Back, k.Quit},
 	}
 }
@@ -142,6 +146,8 @@ func (k keyMap) FullHelp() [][]key.Binding {
 var keys = keyMap{
 	Up:     key.NewBinding(key.WithKeys("up", "k"), key.WithHelp("↑/k", "up")),
 	Down:   key.NewBinding(key.WithKeys("down", "j"), key.WithHelp("↓/j", "down")),
+	Left:   key.NewBinding(key.WithKeys("left", "h"), key.WithHelp("←/h", "left")),
+	Right:  key.NewBinding(key.WithKeys("right", "l"), key.WithHelp("→/l", "right")),
 	Enter:  key.NewBinding(key.WithKeys("enter"), key.WithHelp("enter", "select")),
 	Add:    key.NewBinding(key.WithKeys("a"), key.WithHelp("a", "add")),
 	Delete: key.NewBinding(key.WithKeys("d"), key.WithHelp("d", "del")),
@@ -214,10 +220,18 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.state = viewList
 			}
 		case key.Matches(msg, m.keys.Up):
+			if m.state == viewList && m.cursor >= 3 {
+				m.cursor -= 3
+			}
+		case key.Matches(msg, m.keys.Down):
+			if m.state == viewList && m.cursor+3 < len(m.clocks) {
+				m.cursor += 3
+			}
+		case key.Matches(msg, m.keys.Left):
 			if m.state == viewList && m.cursor > 0 {
 				m.cursor--
 			}
-		case key.Matches(msg, m.keys.Down):
+		case key.Matches(msg, m.keys.Right):
 			if m.state == viewList && m.cursor < len(m.clocks)-1 {
 				m.cursor++
 			}
@@ -252,7 +266,7 @@ var (
 	clockBoxStyle = lipgloss.NewStyle().
 			Border(lipgloss.RoundedBorder()).
 			BorderForeground(lipgloss.Color("#555555")).
-			Padding(1, 3).
+			Padding(1, 4).
 			Margin(0, 1)
 
 	selectedClockStyle = clockBoxStyle.Copy().BorderForeground(lipgloss.Color("#D4AF37"))
@@ -261,7 +275,7 @@ var (
 	dateStyle  = lipgloss.NewStyle().Foreground(lipgloss.Color("#AAAAAA"))
 	labelStyle = lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color("#D4AF37"))
 	
-	bigTimeStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("#D4AF37")).Bold(true)
+	bigTimeStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("#D4AF37"))
 	
 	errorStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("#FF0000")).MarginTop(1)
 )
@@ -335,7 +349,7 @@ func (m model) detailView() string {
 	tzName, offset := t.Zone()
 
 	return lipgloss.JoinVertical(lipgloss.Center,
-		labelStyle.Render(entry.Label),
+		labelStyle.Render(strings.ToUpper(entry.Label)),
 		"",
 		bigTimeStyle.Render(bigTime),
 		"",
