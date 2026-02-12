@@ -152,7 +152,7 @@ var keys = keyMap{
 	Enter:  key.NewBinding(key.WithKeys("enter"), key.WithHelp("enter", "select")),
 	Add:    key.NewBinding(key.WithKeys("a"), key.WithHelp("a", "add")),
 	Delete: key.NewBinding(key.WithKeys("d"), key.WithHelp("d", "del")),
-	Back:   key.NewBinding(key.WithKeys("esc", "backspace"), key.WithHelp("esc", "back")),
+	Back:   key.NewBinding(key.WithKeys("esc"), key.WithHelp("esc", "back")), // Removed backspace from here
 	Quit:   key.NewBinding(key.WithKeys("q", "ctrl+c"), key.WithHelp("q", "quit")),
 }
 
@@ -213,12 +213,14 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				return m, nil
 			}
 
-			switch {
-			case key.Matches(msg, m.keys.Back):
+			// In input steps, Esc cancels, but Backspace should be passed to textinput
+			if key.Matches(msg, m.keys.Back) {
 				m.state = viewList
 				m.textInput.Reset()
 				return m, nil
-			case key.Matches(msg, m.keys.Enter):
+			}
+
+			if key.Matches(msg, m.keys.Enter) {
 				if m.inputStep == 0 {
 					val := strings.TrimSpace(m.textInput.Value())
 					if val == "" { return m, nil }
