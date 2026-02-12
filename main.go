@@ -182,7 +182,8 @@ func initialModel() model {
 	zl := list.New(items, list.NewDefaultDelegate(), 0, 0)
 	zl.Title = "Select Timezone"
 	zl.SetShowStatusBar(false)
-	zl.SetFilteringEnabled(true)
+	zl.SetFilteringEnabled(false) // Disabled filtering
+	zl.SetShowFilter(false)       // Removed filter UI
 	zl.Styles.Title = lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color("#D4AF37"))
 
 	config := loadConfig()
@@ -261,10 +262,6 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 
 			if m.inputStep == 1 {
-				if m.zoneList.FilterState() == list.Filtering {
-					m.zoneList, cmd = m.zoneList.Update(msg)
-					return m, cmd
-				}
 				if key.Matches(msg, m.keys.Back) {
 					m.inputStep = 0
 					return m, nil
